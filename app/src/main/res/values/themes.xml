@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.Foldable" parent="android:Theme.Material.Light.NoActionBar">
+        <!-- Launcher fullscreen: hide system status bar, use custom status bar (clock/battery) -->
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@android:color/black</item>
+    </style>
+</resources>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DUO Fold Transition</string>
+    <string name="a11y_description">Captures the inner display when you start folding and plays a perspective / blur transition on the cover. The screenshot stays in memory for one fold and is never stored or uploaded.</string>
+</resources>
