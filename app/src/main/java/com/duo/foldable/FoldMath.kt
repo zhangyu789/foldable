@@ -1,6 +1,5 @@
 package com.duo.foldable
 
-import android.graphics.Matrix
 import kotlin.math.cos
 import java.lang.Math.toRadians
 
@@ -44,25 +43,12 @@ object FoldMath {
     const val DEFAULT_ROTATION_FACTOR = 0.75f
     const val DEFAULT_HINGE_FACTOR = 0.7f
 
-    /**
-     * Runtime tunable: max extra right-edge stretch (relative to screen width).
-     * 0 = no extension, 2 = up to 2× screen width beyond the edge.
-     * rightX = W · (1 + rightStretchMax · sin(θ))
-     */
     @Volatile
     var rightStretchMax: Float = DEFAULT_RIGHT_STRETCH
 
-    /**
-     * Image rotation/perspective strength: visual angle = animation angle × rotationFactor.
-     * 1 = unchanged, >1 folds faster, <1 folds slower.
-     */
     @Volatile
     var rotationFactor: Float = DEFAULT_ROTATION_FACTOR
 
-    /**
-     * Hinge angle mapping factor: animation angle = raw hinge angle × hingeAngleFactor.
-     * Used to calibrate sensor vs. on-screen sync.
-     */
     @Volatile
     var hingeAngleFactor: Float = DEFAULT_HINGE_FACTOR
 
@@ -92,12 +78,6 @@ object FoldMath {
     fun rightEdgeHalfHeight(height: Float, hingeAngleDeg: Float): Float =
         height * 0.5f * cosShrink(hingeAngleDeg).coerceAtLeast(0.04f)
 
-    /**
-     * Visible width after right edge shrinks toward hinge: W·cos(θ).
-     */
-    fun visibleWidth(width: Float, hingeAngleDeg: Float): Float =
-        width * cosShrink(hingeAngleDeg)
-
     /** @deprecated Legacy right-hinge semantics; kept as W·(1-cosθ) for test compatibility. */
     fun shrinkOffset(width: Float, hingeAngleDeg: Float): Float =
         width * (1f - cosShrink(hingeAngleDeg))
@@ -115,37 +95,6 @@ object FoldMath {
         // Blur increases to the right of blurEdge
         val blurFactor = smoothstep(blurEdge, 1f, x)
         return maxRadius * progress * blurFactor
-    }
-
-    /**
-     * Left-hinge perspective quad map: left edge fixed; right edge extends right (may > W) and foreshortens vertically.
-     */
-    fun perspectiveMatrix(width: Int, height: Int, hingeAngleDeg: Float): Matrix {
-        val m = Matrix()
-        if (width <= 0 || height <= 0) return m
-
-        val w = width.toFloat()
-        val h = height.toFloat()
-        val rightX = rightEdgeX(w, hingeAngleDeg)
-        val half = rightEdgeHalfHeight(h, hingeAngleDeg)
-        val midY = h * 0.5f
-
-        if (half < 1f) {
-            m.setScale(0.01f, 0.01f, 0f, midY)
-            return m
-        }
-
-        val src = floatArrayOf(0f, 0f, w, 0f, w, h, 0f, h)
-        val dst = floatArrayOf(
-            0f, 0f,
-            rightX, midY - half,
-            rightX, midY + half,
-            0f, h
-        )
-        if (!m.setPolyToPoly(src, 0, dst, 0, 4)) {
-            m.setScale(cosShrink(hingeAngleDeg).coerceAtLeast(0.01f), 1f, 0f, midY)
-        }
-        return m
     }
 
     fun smoothstep(edge0: Float, edge1: Float, x: Float): Float {

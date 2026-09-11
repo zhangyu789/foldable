@@ -52,11 +52,6 @@ class FoldableScreenView @JvmOverloads constructor(
         invalidate()
     }
 
-    fun setContentResource(resId: Int) {
-        contentImage?.setImageResource(resId)
-        invalidate()
-    }
-
     fun setBlurEnabled(enabled: Boolean) {
         blurEnabled = enabled
         invalidate()
@@ -67,16 +62,6 @@ class FoldableScreenView @JvmOverloads constructor(
         currentAngle = angle
         foldProgress = FoldMath.angleToProgress(angle)
         applyPerspectiveTransform(angle)
-        invalidate()
-        (parent as? android.view.View)?.invalidate()
-    }
-
-    fun updateFoldProgress(progress: Float) {
-        updateFoldState(progress.coerceIn(0f, 1f) * FoldMath.FOLD_MAX_ANGLE)
-    }
-
-    fun refreshTransform() {
-        applyPerspectiveTransform(currentAngle)
         invalidate()
         (parent as? android.view.View)?.invalidate()
     }

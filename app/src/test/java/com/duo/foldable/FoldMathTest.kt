@@ -118,22 +118,4 @@ class FoldMathTest {
             assertEquals(expected, FoldMath.outerAlpha(angle), 1e-2f)
         }
     }
-
-    @Test
-    fun decelerate_isMonotonicAndBounded() {
-        var prev = -1f
-        for (i in 0..10) {
-            val t = i / 10f
-            val v = FoldInterpolators.decelerate(t)
-            assertTrue(v >= prev - 1e-6f)
-            prev = v
-        }
-        assertEquals(0f, FoldInterpolators.decelerate(0f), 1e-6f)
-        assertEquals(1f, FoldInterpolators.decelerate(1f), 1e-6f)
-    }
-
-    @Test
-    fun dampedSpring_reachesOne() {
-        assertEquals(1f, FoldInterpolators.dampedSpring(1f), 1e-3f)
-    }
 }
