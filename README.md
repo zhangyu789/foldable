@@ -2,7 +2,8 @@
 
 Android demo of a **foldable hinge transition**: when you start folding the device, an [AccessibilityService](https://developer.android.com/reference/android/accessibilityservice/AccessibilityService) captures the inner display with `takeScreenshot()`, then plays a perspective + right-edge Gaussian blur animation as the cover wakes up.
 
-Inspired by the capture / cover hand-off flow in projects like Fold8 Hinge Fade, with additional perspective stretch and blur tuned for a left-hinge model.
+Inspired by the iPhone DUO fold interaction, with perspective stretch and blur tuned for a left-hinge Android model.
+
 
 ## Features
 
@@ -93,4 +94,4 @@ Screenshots are kept in memory for a single fold cycle, used only for the overla
 
 ## License
 
-Add your preferred license before publishing (e.g. MIT / Apache-2.0).
+[MIT](LICENSE)
